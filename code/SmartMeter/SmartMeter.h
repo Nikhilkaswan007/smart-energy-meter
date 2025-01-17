@@ -21,14 +21,14 @@ const int relay1Pin = 19; // Pin for Relay 1
 const int relay2Pin = 18; // Pin for Relay 2
 
 // WiFi credentials
-const char* WIFI_NAME = "LAP123";  
-const char* WIFI_PASSWORD = "nikhil90409";         
+const char* WIFI_NAME = "YourWiFiSSID";  
+const char* WIFI_PASSWORD = "YourWiFiPassword";         
 
 // ThingSpeak configuration
-const int myChannelId = 2704346;         
-const char* myWriteApiKey = "EQ1R2ZC2JNRFY9CA"; 
-const int myChannelId1 = 2741278;         
-const char* myWriteApiKey1 = "AK3VR6HR85R0PWQD"; 
+const int myChannelId = YOUR_CHANNEL_ID1;         
+const char* myWriteApiKey = "YOUR_API_KEY1"; 
+const int myChannelId1 = YOUR_CHANNEL_ID2;         
+const char* myWriteApiKey1 = "YOUR_API_KEY2"; 
 const char* server = "api.thingspeak.com";
 
 // ThingSpeak field numbers
