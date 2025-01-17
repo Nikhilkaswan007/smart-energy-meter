@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Main Content -->
+<div class="main-content">
+    <!-- Container for the switch and warning section -->
+    <div class="switch-warning-container">
+        <!-- ON/OFF Section -->
+        <div class="radio-input">
+            <div class="glass">
+                <div class="glass-inner"></div>
+            </div>
+            <div class="selector">
+                <div class="choice">
+                    <div>
+                        <input
+                            class="choice-circle"
+                            checked="true"
+                            value="one"
+                            name="number-selector"
+                            id="one"
+                            type="radio"
+                        />
+                        <div class="ball"></div>
+                    </div>
+                    <label for="one" class="choice-name">OFF</label>
+                </div>
+                <div class="choice">
+                    <div>
+                        <input
+                            class="choice-circle"
+                            value="two"
+                            name="number-selector"
+                            id="two"
+                            type="radio"
+                        />
+                        <div class="ball"></div>
+                    </div>
+                    <label for="two" class="choice-name">MAIN LINE</label>
+                </div>
+                <div class="choice">
+                    <div>
+                        <input
+                            class="choice-circle"
+                            value="three"
+                            name="number-selector"
+                            id="three"
+                            type="radio"
+                        />
+                        <div class="ball"></div>
+                    </div>
+                    <label for="three" class="choice-name">BACKUP LINE</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning Section -->
+        <div id="warning-section">
+            <h2>Status</h2>
+            <p id="warning-message">Fetching status...</p>
+        </div>
+    </div>
+
+        <!-- ThingSpeak Chart Section -->
+        <div class="chart-section">
+            <h2>ThingSpeak Data Visualization</h2>
+            
+            <!-- Controls for customizing the charts -->
+            <div class="chart-controls">
+                <label for="time-range">Time Range:</label>
+                <select id="time-range">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="this-week">This Week</option>
+                    <option value="this-month">This Month</option>
+                    <option value="custom">Custom Date Range</option>
+                </select>
+
+                <!-- Custom Date Range Inputs -->
+                <div id="custom-dates" style="display:none;">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date">
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="end-date">
+                </div>
+
+                <label for="chart-type">Chart Type:</label>
+                <select id="chart-type">
+                    <option value="line">Line</option>
+                    <option value="bar">Bar</option>
+                    <option value="spline">Spline</option>
+                </select>
+
+                <label for="data-points">Number of Data Points:</label>
+                <input type="number" id="data-points" value="60" min="10" max="500" />
+
+                <!-- Apply Button -->
+                <button id="apply-btn">Apply</button>
+            </div>
+
+            <!-- Embedded ThingSpeak charts -->
+            <div class="charts-container" >
+                <iframe id="chart1" width="450" height="260"  
+                    src="https://thingspeak.com/channels/2704346/charts/5?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
+                </iframe>
+                <iframe id="chart2" width="450" height="260" 
+                    src="https://thingspeak.com/channels/2704346/charts/4?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=30&type=line">
+                </iframe>
+                <iframe id="chart3" width="450" height="260"  
+                src="https://thingspeak.com/channels/2704346/charts/6?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
+            </iframe>
+                <iframe id="chart4" width="450" height="260" 
+                    src="https://thingspeak.com/channels/2704346/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&xaxis=hhh">
+                </iframe>
+                <iframe id="chart5" width="450" height="260" 
+                    src="https://thingspeak.com/channels/2704346/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
+                </iframe>
+                <iframe id="chart6" width="450" height="260" 
+                src="https://thingspeak.com/channels/2741278/charts/7?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=error+codes&type=line&xaxis=error">
+            </iframe>
+            <iframe id="chart7" width="450" height="260" 
+            src="https://thingspeak.com/channels/2741278/charts/8?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=switch+value&type=line&yaxis=Value">
+            </iframe>
+            </div>
+        </div>
+</div>
+        
+        <script>
+            // Function to update all charts with new parameters
+            function updateCharts() {
+                const timeRange = document.getElementById("time-range").value;
+                const chartType = document.getElementById("chart-type").value;
+                const dataPoints = document.getElementById("data-points").value;
+                let startDate = '', endDate = '';
+
+                // Handle custom date range
+                if (timeRange === 'custom') {
+                    startDate = document.getElementById("start-date").value;
+                    endDate = document.getElementById("end-date").value;
+                    if (startDate && endDate) {
+                        startDate = `&start=${startDate}`;
+                        endDate = `&end=${endDate}`;
+                    }
+                } else {
+                    startDate = '';
+                    endDate = '';
+                }
+
+                // Define the base URL and parameters
+                const baseUrla = 'https://thingspeak.com/channels/2741278/charts/';
+                const baseUrl = 'https://thingspeak.com/channels/2704346/charts/';
+                const commonParams = `?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=${dataPoints}&type=${chartType}${startDate}${endDate}&api_key=EQ1R2ZC2JNRFY9CA`;
+                const commonParamsa = `?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=${dataPoints}&type=${chartType}${startDate}${endDate}&api_key=AK3VR6HR85R0PWQD`;
+
+                // Update each chart iframe
+                document.getElementById("chart1").src = `${baseUrl}5${commonParams}`;
+                document.getElementById("chart2").src = `${baseUrl}4${commonParams}`;
+                document.getElementById("chart3").src = `${baseUrl}6${commonParams}`;
+                document.getElementById("chart4").src = `${baseUrl}2${commonParams}`;
+                document.getElementById("chart5").src = `${baseUrl}1${commonParams}`;
+                document.getElementById("chart6").src = `${baseUrla}7${commonParamsa}`;
+                document.getElementById("chart7").src = `${baseUrla}8${commonParamsa}`;
+                console.log(`Chart 6 URL: ${baseUrla}7${commonParamsa}`);
+console.log(`Chart 7 URL: ${baseUrla}8${commonParamsa}`);
+
+                
+
+            }
+
+            // Event listener for custom date range visibility
+            document.getElementById("time-range").addEventListener("change", function() {
+                const timeRange = this.value;
+                if (timeRange === 'custom') {
+                    document.getElementById("custom-dates").style.display = 'block';
+                } else {
+                    document.getElementById("custom-dates").style.display = 'none';
+                }
+            });
+
+            // Event listener for the Apply button
+            document.getElementById("apply-btn").addEventListener("click", updateCharts);
+
+            // Function to fetch error code from ThingSpeak and display warning
+            async function fetchErrorCode() {
+                const url = 'https://api.thingspeak.com/channels/2741278/fields/7/last.json?api_key=AK3VR6HR85R0PWQD';
+                
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    const errorCode = parseInt(data.field7, 10);
+                    const warningMessageElement = document.getElementById("warning-message");
+                    const warningSectionElement = document.getElementById("warning-section");
+
+                    // Set the warning message based on the error code
+                    switch (errorCode) {
+                        case 0:
+                            warningMessageElement.textContent = "Status: OK";
+                            warningSectionElement.style.color =  "rgb(0, 187, 0)";
+                            warningMessageElement.style.color = "rgb(0, 187, 0)";
+                            warningSectionElement.style.backgroundColor =  "rgb(0, 187, 0,0.1)";
+                            break;
+                        case 1:
+                            warningMessageElement.textContent = "Warning: No Power";
+                            warningMessageElement.style.color = "orange";
+                            warningSectionElement.style.backgroundColor =  "rgba(255, 69, 0, 0.1)";
+                            
+                            break;
+                            break;
+                        case 2:
+                            warningMessageElement.textContent = "Warning: Low Voltage";
+                            warningMessageElement.style.color = "orange";
+                            warningSectionElement.style.color = "rgb(223, 64, 64)";
+                            warningSectionElement.style.backgroundColor =  "rgba(255, 69, 0, 0.1)";
+                            break;
+                        case 3:
+                            warningMessageElement.textContent = "Warning: High Current";
+                            warningMessageElement.style.color = "orange";
+                            warningSectionElement.style.color = "rgb(223, 64, 64)";
+                            warningSectionElement.style.backgroundColor =  "rgba(255, 69, 0, 0.1)";
+                            break;
+                        case 5:
+                            warningMessageElement.textContent = "Warning: High Current for a prolonged time, Power off from Smart Energy Meter";
+                            warningMessageElement.style.color = "red";
+                            warningSectionElement.style.color = "rgb(223, 64, 64)";
+                            warningSectionElement.style.backgroundColor =  "rgba(255, 69, 0, 0.1)";
+                            break;
+                        case 9:
+                            warningMessageElement.textContent = "Critical: Short Circuit (Current above 7A). Power off. Requires manual reset after line check.";
+                            warningMessageElement.style.color = "red";
+                            warningSectionElement.style.color = "rgb(223, 64, 64)";
+                            warningSectionElement.style.backgroundColor =  "rgba(255, 69, 0, 0.1)";
+                            break;
+                        default:
+                            warningMessageElement.textContent = "Unknown Error Code";
+                            warningMessageElement.style.color = "gray";
+                            warningSectionElement.style.color = "rgb(223, 64, 64)";
+                            warningSectionElement.style.backgroundColor =  "rgba(255, 69, 0, 0.1)";
+                    }
+                } catch (error) {
+                    console.error("Error fetching error code:", error);
+                }
+            }   // Fetch the error code every 30 seconds to keep the warning section updated
+            setInterval(fetchErrorCode, 16000);
+            fetchErrorCode(); // Initial call to fetch error code on load
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            const apiKey = 'AK3VR6HR85R0PWQD'; // ThingSpeak API Key
+            const channelID = '2741278'; // ThingSpeak Channel ID
+        
+            // Maximum retry attempts
+            const maxRetries = 3;
+        
+            // Function to send the state to ThingSpeak with retries
+            function sendStateToThingSpeak(state, attempt = 1) {
+                const url = `https://api.thingspeak.com/update?api_key=${apiKey}&field8=${state}`;
+        
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        // ThingSpeak responds with 0 if the request failed to update
+                        if (response !== 0) {
+                            console.log(`State ${state} sent successfully on attempt ${attempt}`);
+                        } else if (response === 0  || attempt < maxRetries) {
+                                console.log(`Attempt ${attempt} failed. Retrying...`);
+                                retrySendState(state, attempt);
+                        }
+                    },
+                    error: function(error) {
+                        console.log('Error sending state:', error);
+                        if (attempt < maxRetries) {
+                            retrySendState(state, attempt);
+                        }
+                    }
+                });
+            }
+        
+            // Function to retry with exponential backoff
+            function retrySendState(state, attempt) {
+                const delay = Math.pow(2, attempt) * 500; // Exponential backoff delay
+                setTimeout(function() {
+                    sendStateToThingSpeak(state, attempt + 1);
+                }, delay);
+            }
+        
+            // Function to get the state from ThingSpeak
+            function getStateFromThingSpeak() {
+                const url = `https://api.thingspeak.com/channels/${channelID}/fields/8.json?api_key=${apiKey}&results=1`;
+        
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        const lastEntry = response.feeds[0]; // Get the latest feed entry
+                        const state = parseInt(lastEntry.field8); // Convert field8 value to an integer
+                        setRadioButtonState(state); // Update radio button based on fetched state
+                    },
+                    error: function(error) {
+                        console.log('Error fetching state:', error);
+                    }
+                });
+            }
+        
+            // Function to update the radio button selection based on the state
+            function setRadioButtonState(state) {
+                if (state === 1) {
+                    $('#two').prop('checked', true); // MAIN LINE
+                } else if (state === 2) {
+                    $('#three').prop('checked', true); // BACKUP LINE
+                } else if (state === 3) {
+                    $('#one').prop('checked', true); // OFF
+                }
+            }
+        
+            // Event listener for the radio buttons to send state to ThingSpeak on selection
+            $(document).ready(function() {
+                $('input[name="number-selector"]').on('change', function() {
+                    let selectedValue;
+        
+                    if ($('#one').is(':checked')) {
+                        selectedValue = 3; // OFF
+                    } else if ($('#two').is(':checked')) {
+                        selectedValue = 1; // MAIN LINE
+                    } else if ($('#three').is(':checked')) {
+                        selectedValue = 2; // BACKUP LINE
+                    }
+        
+                    // Send the selected value to ThingSpeak
+                    sendStateToThingSpeak(selectedValue);
+                });
+        
+                // Get the initial state from ThingSpeak on page load
+                getStateFromThingSpeak();
+        
+                // Check for updates from ThingSpeak every 5 seconds to sync changes
+                setInterval(getStateFromThingSpeak, 16000);
+            });
+        </script>
+        
+</body>
+</html>
