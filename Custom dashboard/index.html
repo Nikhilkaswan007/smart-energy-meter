@@ -107,25 +107,25 @@
             <!-- Embedded ThingSpeak charts -->
             <div class="charts-container" >
                 <iframe id="chart1" width="450" height="260"  
-                    src="https://thingspeak.com/channels/2704346/charts/5?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
+                    src="https://thingspeak.com/channels/Your channelID/charts/Your chart Number?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
                 </iframe>
                 <iframe id="chart2" width="450" height="260" 
-                    src="https://thingspeak.com/channels/2704346/charts/4?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=30&type=line">
+                    src="https://thingspeak.com/channels/Your channelID/charts/Your chart Number%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=30&type=line">
                 </iframe>
                 <iframe id="chart3" width="450" height="260"  
-                src="https://thingspeak.com/channels/2704346/charts/6?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
+                src="https://thingspeak.com/channels/Your channelID/charts/Your chart Number?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
             </iframe>
                 <iframe id="chart4" width="450" height="260" 
-                    src="https://thingspeak.com/channels/2704346/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&xaxis=hhh">
+                    src="https://thingspeak.com/channels/Your channelID/charts/Your chart Number?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&xaxis=hhh">
                 </iframe>
                 <iframe id="chart5" width="450" height="260" 
-                    src="https://thingspeak.com/channels/2704346/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
+                    src="https://thingspeak.com/channels/Your channelID/charts/Your chart Number?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15">
                 </iframe>
                 <iframe id="chart6" width="450" height="260" 
-                src="https://thingspeak.com/channels/2741278/charts/7?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=error+codes&type=line&xaxis=error">
+                src="https://thingspeak.com/channels/Your channelID/charts/Your chart Number?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=error+codes&type=line&xaxis=error">
             </iframe>
             <iframe id="chart7" width="450" height="260" 
-            src="https://thingspeak.com/channels/2741278/charts/8?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=switch+value&type=line&yaxis=Value">
+            src="https://thingspeak.com/channels/Your channelID/charts/Your chart Number?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=switch+value&type=line&yaxis=Value">
             </iframe>
             </div>
         </div>
@@ -153,10 +153,10 @@
                 }
 
                 // Define the base URL and parameters
-                const baseUrla = 'https://thingspeak.com/channels/2741278/charts/';
-                const baseUrl = 'https://thingspeak.com/channels/2704346/charts/';
-                const commonParams = `?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=${dataPoints}&type=${chartType}${startDate}${endDate}&api_key=EQ1R2ZC2JNRFY9CA`;
-                const commonParamsa = `?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=${dataPoints}&type=${chartType}${startDate}${endDate}&api_key=AK3VR6HR85R0PWQD`;
+                const baseUrla = 'https://thingspeak.com/channels/Your channelID/charts/';
+                const baseUrl = 'https://thingspeak.com/channels/Your channelID/charts/';
+                const commonParams = `?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=${dataPoints}&type=${chartType}${startDate}${endDate}&api_key=Your API key`;
+                const commonParamsa = `?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=${dataPoints}&type=${chartType}${startDate}${endDate}&api_key=Your API key`;
 
                 // Update each chart iframe
                 document.getElementById("chart1").src = `${baseUrl}5${commonParams}`;
@@ -167,7 +167,7 @@
                 document.getElementById("chart6").src = `${baseUrla}7${commonParamsa}`;
                 document.getElementById("chart7").src = `${baseUrla}8${commonParamsa}`;
                 console.log(`Chart 6 URL: ${baseUrla}7${commonParamsa}`);
-console.log(`Chart 7 URL: ${baseUrla}8${commonParamsa}`);
+                console.log(`Chart 7 URL: ${baseUrla}8${commonParamsa}`);
 
                 
 
@@ -188,7 +188,7 @@ console.log(`Chart 7 URL: ${baseUrla}8${commonParamsa}`);
 
             // Function to fetch error code from ThingSpeak and display warning
             async function fetchErrorCode() {
-                const url = 'https://api.thingspeak.com/channels/2741278/fields/7/last.json?api_key=AK3VR6HR85R0PWQD';
+                const url = 'https://api.thingspeak.com/channels/Your channelID/fields/Your field Number/last.json?api_key=Your API key';
                 
                 try {
                     const response = await fetch(url);
@@ -251,8 +251,8 @@ console.log(`Chart 7 URL: ${baseUrla}8${commonParamsa}`);
         </script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            const apiKey = 'AK3VR6HR85R0PWQD'; // ThingSpeak API Key
-            const channelID = '2741278'; // ThingSpeak Channel ID
+            const apiKey = 'Your API key'; // ThingSpeak API Key
+            const channelID = 'Your channelID'; // ThingSpeak Channel ID
         
             // Maximum retry attempts
             const maxRetries = 3;
